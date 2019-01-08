@@ -13,7 +13,7 @@ def long_description():
 
 setup(
   name='peewee-db-evolve',
-  version=__import__('peeweedbevolve').__version__,
+  version='3.7.0',
   description='Schema Evolution for Peewee',
   long_description=long_description(),
   author='Derek Anderson',
@@ -31,4 +31,3 @@ setup(
   ],
   install_requires=['colorama', 'peewee'],
 )
-
