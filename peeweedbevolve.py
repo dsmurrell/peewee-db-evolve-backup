@@ -708,7 +708,7 @@ def calc_index_changes(db, migrator, existing_indexes, model, renamed_cols):
     to_run += create_index(model, [fields_by_column_name[col] for col in index[1]], index[2])
   return to_run
 
-def evolve(db, interactive=True, ignore_tables=None):
+def evolve(db, interactive=True, ignore_tables=None, always_confirm_no=False):
   if interactive:
     print((colorama.Style.BRIGHT + colorama.Fore.RED + 'Making updates to database: {}'.format(db.database) + colorama.Style.RESET_ALL))
   to_run = calc_changes(db, ignore_tables=ignore_tables)
@@ -719,7 +719,7 @@ def evolve(db, interactive=True, ignore_tables=None):
 
   commit = True
   if interactive:
-    commit = _confirm(db, to_run)
+    commit = _confirm(db, to_run, always_confirm_no)
   _execute(db, to_run, interactive=interactive, commit=commit)
 
 
@@ -773,7 +773,9 @@ def print_sql(sql):
   print(sql)
 
 
-def _confirm(db, to_run):
+def _confirm(db, to_run, always_confirm_no):
+  if always_confirm_no:
+    sys.exit(1)
   print()
   print("Your database needs the following %s:" % ('changes' if len(to_run)>1 else 'change'))
   print()
